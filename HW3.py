@@ -22,24 +22,8 @@ squared_number()
 # Write a function that takes in a string, a letter, and a number and returns the string with the letter replaced at the number index
 # IE. If the user inputs "Hello World", "a", and 3, the function should return "Helao World"
 
-#TODO HELP!!!!
-# def question2(string, char, number_shift):
-#    for i in string:
-#         word_index = len(string)
-#         if word_index == number_shift:
-#             return char == i
-
-
-
-# def question2_inputs():
-#     word1 = input("Enter a string: ")
-#     letter = input("Enter a letter: ")
-#     numbered_shift = int(input("Enter a number: "))
-    
-#     result = question2(word1, letter, numbered_shift)
-#     print(result)
-
-# question2_inputs()
+# DONT DO THIS QUESTION
+# 
 
 # Question 3:
 # Write a function that takes in a number, a lower bound, and an upper bound and returns whether the number is within the bounds
