@@ -1,5 +1,5 @@
 # test.py
-# Author:
+# Author: Daniel Flesch
 
 import pytest
 from HW4 import add, subtract, divide, multiply, greet, square, is_even, grade_calculator, speed_check, is_leap_year

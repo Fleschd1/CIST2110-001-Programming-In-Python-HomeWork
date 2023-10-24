@@ -1,5 +1,5 @@
 # HW4.py
-# Author:
+# Author: Daniel Flesch
 
 ### README
 # This file contains buggy functions that you need to fix.
@@ -28,9 +28,9 @@ def add(a:float, b:float) -> float:
     Returns:
         float: the sum of a and b
     """
-    return a - b
+    return a + b
 # Where is the bug in the buggy function?
-# A:
+# A: wrong math sign, should be "a + b"
 
 def subtract(a:float, b:float) -> float:
     """Subtract two numbers
@@ -42,9 +42,9 @@ def subtract(a:float, b:float) -> float:
     Returns:
         float: the difference of a and b
     """
-    return a + b
+    return a - b
 # Where is the bug in the buggy function?
-# A:
+# A: wrong math sign, should be "a - b"
 
 def divide(a, b):
     """Divide two numbers
@@ -56,9 +56,9 @@ def divide(a, b):
     Returns:
         float: the quotient of a and b
     """
-    return a * b
+    return a / b
 # Where is the bug in the buggy function?
-# A:
+# A: wrong math sign, should be "a / b"
 
 
 def multiply(a:float, b:float) -> float:
@@ -71,10 +71,10 @@ def multiply(a:float, b:float) -> float:
     Returns:
         float: the product of a and b
     """
-    return a / b
+    return a * b
 
 # Where is the bug in the buggy function?
-# A:
+# A: wrong math sign, should be "a * b"
 
 
 def greet(name:str)->str:
@@ -86,9 +86,9 @@ def greet(name:str)->str:
     Returns:
         _type_: the greeting message
     """
-    return "Heloo, "+name+"!"
+    return "Hello, "+name+"!"
 # Where is the bug in the buggy function?
-# A:
+# A: typo in the return string
 
 
 def square(num:int) -> int:
@@ -100,9 +100,9 @@ def square(num:int) -> int:
     Returns:
         int: the square of the number
     """
-    return num + num
+    return num ** 2
 # Where is the bug in the buggy function?
-# A:
+# A: wrong math sign, should be "a ** b"
 
 
 def is_even(num:int) -> bool:
@@ -114,9 +114,13 @@ def is_even(num:int) -> bool:
     Returns:
         bool: True if the number is even, False otherwise
     """
-    return num % 2 == 1
+    if num % 2 == 0:
+        return True
+    else:
+        return False
+    
 # Where is the bug in the buggy function?
-# A:
+# A: Not returning boolean values
 
 
 def grade_calculator(score:float) -> str:
@@ -128,20 +132,20 @@ def grade_calculator(score:float) -> str:
     Returns:
         str: the grade for the score
     """
-    if 90 <= score <= 100:
+    if score >= 90 and score <= 100:
         return "A"
-    elif 80 <= score < 90:
+    if score >= 80 and score < 90:
         return "B"
-    elif 70 <= score < 79:
+    if score >= 70 and score < 80:
         return "C"
-    elif 60 <= score < 70:
+    if score >= 60 and score < 70:
         return "D"
-    elif 0 <= score < 60:
+    if score >= 50 and score < 60:
         return "F"
     else:
         return "Invalid Score"
 # Where is the bug in the buggy function?
-# A:
+# A: It was using elif instead of if, and started with the number instead of the parameter.
 
 def speed_check(speed:float) -> str:
     """Check if the speed is within the speed limit
@@ -153,16 +157,16 @@ def speed_check(speed:float) -> str:
         str: the speed check result
     """
     # Assuming general speed limits: min: 20, max: 70 (in mph)
+    if speed > 70: 
+        return "Over speed limit"
+    if speed >= 20 and speed < 70:
+        return "Within limit"
     if speed < 20:  
         return "Too slow"
-    elif 20 <= speed <= 60:
-        return "Within limit"
-    elif speed > 70: 
-        return "Over speed limit"
     else:
         return "Unknown"
 # Where is the bug in the buggy function?
-# A:
+# A: Had to move some stuff around and the > or < symbols.
 
 def is_leap_year(year:int) -> bool:
     """Check if a year is a leap year
@@ -173,16 +177,17 @@ def is_leap_year(year:int) -> bool:
     Returns:
         bool: True if the year is a leap year, False otherwise
     """
-    if year % 4 == 0:
+    if year % 400 == 0:
         return True
     elif year % 100 == 0:
         return False
-    elif year % 400 == 0:
+    elif year % 4 == 0:
         return True
-    else:
+    else: 
         return False
+    
 # Where is the bug in the buggy function?
-# A:
+# A: The order of the statements need to be flipped around, the current format messes it up.
 
 def main():
     print("You are running me directly!")
