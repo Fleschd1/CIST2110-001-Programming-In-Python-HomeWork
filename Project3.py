@@ -5,7 +5,8 @@
 #   \ \  \___|\ \  \\  \\ \  \\\  \|\  \\_\  \ \  \_|\ \ \  \____   \ \  \          __\_\  \
 #    \ \__\    \ \__\\ _\\ \_______\ \________\ \_______\ \_______\  \ \__\        |\_______\
 #     \|__|     \|__|\|__|\|_______|\|________|\|_______|\|_______|   \|__|        \|_______|
-# Author:
+
+# Author: Daniel Flesch
 # CIST2110-001-Project-3 Library Management System (LMS)
 # Project 3 will implement a library management system (LMS) that will allow users to manage books, users, and a library to manage collection of books and users.
 # The LMS will be menu driven and will allow users to add, delete, and update books and users.
@@ -16,6 +17,7 @@
 # VIEW (at the top) -> WORD WRAP
 
 # Import statements:
+import csv
 
 # Project outline and requirements:
 
@@ -27,57 +29,185 @@
 #    c. Author (string)
 #    d. borrowed (boolean) - this should not be passed in as a parameter, it should be set to False by default
 # USE SELF IN THE __INIT__ METHOD TO CREATE THESE ATTRIBUTES
-
+class Book:
+    def __init__(self,title: str, author: str, isbn: int):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.borrowed = False
 # Methods:
 #    a. __str__ (returns a string representation of the book using the following format: ISBN: <ISBN>, Title: <Title>, Author: <Author>, Borrowed: <Borrowed>)
+    def __str__(self) -> str:
+        return f" ISBN: {self.isbn}, Title: {self.title}, Author: {self.author}, Borrowed: {self.borrowed})"
+    
 #    b. checkout - sets borrowed to True and returns a message that the book has been checked out
+    def check_out(self) -> bool:
+            self.borrowed = True
+            return self.borrowed
+       
+            
 #    c. checkin - sets borrowed to False and returns a message that the book has been checked in
+    def check_in(self) -> bool:
+        self.borrowed = False
+        print("The book has been checked in, thank you.")
+        return self.borrowed
+    
 #    d. isBorrowed - returns True if the book is borrowed and False if the book is not borrowed
-
+    def isBorrowed(self) -> bool:
+        if self.borrowed:
+            print("Book is borrowed.")
+            return True
+        else:
+            print("Book is not borrowed and currently available.")
+        return False
 
 # 2. Create a User class that has the following attributes (create a __init__ method)):
 #    a. Name (string)
 #    c. ID (int)
 #   d. borrowedBooks (list of books)
 # USE SELF IN THE __INIT__ METHOD TO CREATE THESE ATTRIBUTES
+class User:
+    def __init__(self, name: str, id: int):
+        self.name = name
+        self.member_id = id
+        self.borrowed_books = []
 
+    def __str__(self) -> str:
+        return f"Name: {self.name}, ID: {self.member_id}, Borrowed Books: {self.borrowed_books}"
 # Methods:
 #    a. __str__ (returns a string representation of the user using the following format: Name: <Name>, ID: <ID>, Borrowed Books: <Borrowed Books>)
 #    b. borrow_book - adds the book to the borrowedBooks list, updates the isBorrowed attribute of the book to True, and returns a message that the book has been checked out (should take a book as a parameter)
 #    c. return_book - removes the book from the borrowedBooks list, updates the isBorrowed attribute of the book to False, and returns a message that the book has been checked in (should take a book as a parameter)
-
+    def borrow_book(self, book: Book) -> str:
+        if book.isBorrowed():
+            return f"{book.title} is already borrowed by another user."
+        self.borrowed_books.append(book)
+        book.check_out()
+        return f"{book.title} has been checked out by {self.name}"
+    
+    def return_book(self, book: Book) -> str:
+        if book.isBorrowed():
+            book.check_in()
+            self.borrowed_books.remove(book)
+            return f"{book.title} has been returned by {self.name}"
+        else:
+            return f"{book.title} is not borrowed by {self.name}"
+        
 # 3. Create a Library class that has the following attributes (create a __init__ method)):
 #    a. books (list of books)
 #    b. users (list of users)
 # USE SELF IN THE __INIT__ METHOD TO CREATE THESE ATTRIBUTES
+class Library:
+    def __init__(self):
+        self.books = []
+        self.users = []
 
 # Methods:
 #    a. __str__ (returns a string representation of the library using the following format: Books: <Books>, Users: <Users>)
+    def __str__(self) -> str:
+        return f"Books: {self.books}, Users: {self.users}"
+    
 #    b. add_book - adds a book to the books list (should take a book as a parameter)
+    def add_book(self, book: Book):
+        self.books.append(book)
+        return self.books
+    
 #    c. add_user - adds a user to the users list (should take a user as a parameter)
+    def add_user(self, user: User):
+        self.users.append(user)
+        return self.users
+    
 #    d. find_book - returns the book with the given ISBN (should take an ISBN as a parameter)
+    def find_book(self, isbn: int):
+        for book in self.books:
+            if book.isbn == isbn:
+                return book
+            else:
+              return "Book not found"
+
 #    e. find_user - returns the user with the given ID (should take an ID as a parameter)
+    def find_user(self, id: int):
+        for user in self.users:
+            if user.member_id == id:
+                return user
+            else:
+                return "user not found"
+
 #    f. export_books_to_csv - exports the books list to a csv file (should take a filename as a parameter)
 #       The csv file should have the following format: ISBN,Title,Author,Borrowed
 #       The csv.DictWriter class is very useful for this: https://docs.python.org/3/library/csv.html#csv.DictWriter
+    def export_books_to_csv(self, filename):
+        fieldnames = ["ISBN", " Title", " Author", " Borrowed(True/False)"]
+        try:
+            
+            with open(filename, "w", newline='') as file:
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+
+                for book in self.books:
+                    book_dict = {
+                        "ISBN": book.isbn,
+                        "Title": book.title,
+                        "Author": book.author,
+                        "Borrowed": book.isBorrowed()
+                    }
+                    writer.writerow(book_dict)
+
+            print(f"Books exported successfully to {filename}")
+
+        except FileNotFoundError:
+            print("File does not exist.")
+
+
 #    g. export_users_to_csv - exports the users list to a csv file (should take a filename as a parameter)
 #       This will be similar to the export_books_to_csv method but there is a slight difference with the borrowedBooks attribute if you get stuck this code might help:
 #       borrowed_books_titles = [book.title for book in user.borrowed_books]
 #       Use that and pythons .join method to create a string of the borrowed books titles
+    def export_users_to_csv(self, filename):
+        try:
+            with open(filename, "w", newline='') as file:
+                fieldnames = ["Name", "ID", "Borrowed Books"]
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+
+                for user in self.users:
+                    borrowed_books_titles = [book.title for book in user.borrowed_books]
+                    user_dict = {
+                        "Name": user.name,
+                        "ID": user.member_id,
+                        "Borrowed Books": ", ".join(borrowed_books_titles)
+                    }
+                    writer.writerow(user_dict)
+
+            print(f"Users exported successfully to {filename}")
+
+        except FileNotFoundError:
+            print("File does not exist.")
+
 
 # 4. Create a menu that will allow users to:
-#    a. Add books
-#    b. Add users
-#    c. Delete books
-#    d. Delete users
-#    g. Borrow books
-#    h. Return books
-#    i. Search books
-#    j. Check if book is available
-#    k. Search users
-#    l. Export books to csv
-#    m. Export users to csv
-#    z. Exit
+def main_menu():
+    print("Welcome to the Library Management System (LMS)")
+    print("Please select an option from the menu below:")
+    print("a. Add books")
+    print("b. Add users")
+    print("c. Delete books")
+    print("d. Delete users")
+    print("g. Borrow books")
+    print("h. Return books")
+    print("i. Search books")
+    print("j. Check if book is available")
+    print("k. Search users")
+    print("l. Export books to csv")
+    print("m. Export users to csv")
+    print("z. Exit")
+    choice = input("Enter your selection: ")
+
+    if choice == int:
+        print("Please enter a valid selection.")
+        return main_menu()
+    return choice
+#
 
 # RQUIREMENTS:
 # 1. You should be doing error checking on all user input (make sure the user enters a valid ISBN, ID, etc.) and handle any errors appropriately (i.e. if the user enters an invalid ISBN, ask them to enter a valid ISBN)
@@ -104,7 +234,7 @@
 
 
 def main():
-    pass  # Remove this line when you implement this method
+    main_menu()
 
 
 if __name__ == "__main__":
