@@ -89,10 +89,3 @@ def test_library_find_user():
     library.add_user(user)
     user_found = library.find_user(101)
     assert user_found == user
-
-# def test_export_books():
-#     library = Library()
-
-#     library.add_book(Book('Book1', 'Author1', 123))
-#     library.add_book(Book('Book2', 'Author2', 456))
-#     library.export_books_to_csv('test_book_export.csv')
